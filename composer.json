@@ -24,7 +24,7 @@
     ],
     "autoload": {
         "psr-0": {
-            "yii\\redactor\\": "/"
+            "yii\\redactor\\": ""
         }
     },
     "minimum-stability": "dev",
