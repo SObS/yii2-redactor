@@ -1,6 +1,19 @@
 yii2-redactor
 =============
 
+Install
+=====
+
+```php
+
+	'components' => [
+        'redactor' => [
+          'class' => 'yii\redactor\RedactorModule'
+        ],
+      ] 
+        
+```
+
 Using
 =====
 
