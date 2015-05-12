@@ -33,7 +33,7 @@ use yii\redactor\widgets\Redactor;
 				        'fileUpload' => \yii\helpers\Html::url('/redactor/upload/file'),
 				        'lang' => 'en',
 				        'plugins' => ['fontcolor', 'filemanager', 'imagemanager', 'table', 'undoredo'],
-                'placeholder' => 'Please add description',
+                		'placeholder' => 'Please add description',
             ],
           ]
         ); ?>	
