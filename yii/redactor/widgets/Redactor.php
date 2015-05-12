@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -6,11 +7,14 @@
  */
 
 namespace yii\redactor\widgets;
+
 use Yii;
 use yii\widgets\InputWidget;
 use yii\helpers\Html;
 use yii\helpers\Json;
 use yii\web\JsExpression;
+use yii\web\AssetBundle;
+use yii\helpers\ArrayHelper;
 
 /**
  * @author Nghia Nguyen <yiidevelop@hotmail.com>
@@ -18,28 +22,33 @@ use yii\web\JsExpression;
  */
 class Redactor extends InputWidget
 {
-    public $options = array();
-    public $clientOptions = array(
-        'imageGetJson' => '/redactor/upload/imagejson',
+
+    public $options = [];
+    public $clientOptions = [
+        'imageManagerJson' => '/redactor/upload/imagejson',
         'imageUpload' => '/redactor/upload/image',
-        'clipboardUploadUrl' => '/redactor/upload/clipboard',
         'fileUpload' => '/redactor/upload/file'
-    );
+    ];
+    private $_assetBundle;
 
     public function init()
     {
-        if ($this->hasModel()) {
-            $this->options['id'] = Html::getInputId($this->model, $this->attribute);
-        } else {
-            $this->options['id'] = $this->getId();
+        if (!isset($this->options['id'])) {
+            if ($this->hasModel()) {
+                $this->options['id'] = Html::getInputId($this->model, $this->attribute);
+            } else {
+                $this->options['id'] = $this->getId();
+            }
         }
-        if ($this->clientOptions['imageUpload']) {
+        if (isset($this->clientOptions['imageUpload'])) {
             $this->clientOptions['imageUploadErrorCallback'] = new JsExpression("function(json){alert(json.error);}");
         }
-        if ($this->clientOptions['fileUpload']) {
+        if (isset($this->clientOptions['fileUpload'])) {
             $this->clientOptions['fileUploadErrorCallback'] = new JsExpression("function(json){alert(json.error);}");
         }
-        $this->registerBundles();
+        $this->registerAssetBundle();
+        $this->registerRegional();
+        $this->registerPlugins();
         $this->registerScript();
     }
 
@@ -52,18 +61,30 @@ class Redactor extends InputWidget
         }
     }
 
-    public function registerBundles()
+    public function registerRegional()
     {
-        RedactorAsset::register($this->getView());
-        if (!isset($this->clientOptions['lang']) && Yii::$app->language != 'en_US') {
-            $this->clientOptions['lang'] = Yii::$app->language;
-            RedactorRegionalAsset::register($this->getView());
+        $lang = ArrayHelper::getValue($this->clientOptions, 'lang', false);
+        if ($lang) {
+            $langAsset = 'lang/' . $lang . '.js';
+            if (file_exists(Yii::getAlias($this->assetBundle->sourcePath . '/' . $langAsset))) {
+                $this->assetBundle->js[] = $langAsset;
+            } else {
+                ArrayHelper::remove($this->clientOptions, 'lang');
+            }
         }
+    }
+
+    public function registerPlugins()
+    {
         if (isset($this->clientOptions['plugins']) && count($this->clientOptions['plugins'])) {
             foreach ($this->clientOptions['plugins'] as $plugin) {
-                $assetBundle = 'yii\redactor\RedactorPlugin' . ucfirst($plugin) . 'Asset';
-                if (class_exists($assetBundle)) {
-                    $assetBundle::register($this->getView());
+                $js = 'plugins/' . $plugin . '/' . $plugin . '.js';
+                if (file_exists(Yii::getAlias($this->assetBundle->sourcePath . DIRECTORY_SEPARATOR . $js))) {
+                    $this->assetBundle->js[] = $js;
+                }
+                $css = 'plugins/' . $plugin . '/' . $plugin . '.css';
+                if (file_exists(Yii::getAlias($this->assetBundle->sourcePath . '/' . $css))) {
+                    $this->assetBundle->css[] = $css;
                 }
             }
         }
@@ -73,6 +94,19 @@ class Redactor extends InputWidget
     {
         $clientOptions = (count($this->clientOptions)) ? Json::encode($this->clientOptions) : '';
         $this->getView()->registerJs("jQuery('#{$this->options['id']}').redactor({$clientOptions});");
+    }
+
+    public function registerAssetBundle()
+    {
+        $this->_assetBundle = RedactorAsset::register($this->getView());
+    }
+
+    public function getAssetBundle()
+    {
+        if (!($this->_assetBundle instanceof AssetBundle)) {
+            $this->registerAssetBundle();
+        }
+        return $this->_assetBundle;
     }
 
 }

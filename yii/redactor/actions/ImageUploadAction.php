@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -6,8 +7,9 @@
  */
 
 namespace yii\redactor\actions;
+
+use Yii;
 use yii\redactor\models\ImageUploadModel;
-use yii\helpers\Json;
 
 /**
  * @author Nghia Nguyen <yiidevelop@hotmail.com>
@@ -15,18 +17,14 @@ use yii\helpers\Json;
  */
 class ImageUploadAction extends \yii\base\Action
 {
-    public $uploadDir = '@webroot/uploads';
-
     function run()
     {
         if (isset($_FILES)) {
-            $model = new ImageUploadModel(array('uploadDir' => $this->uploadDir));
+            $model = new ImageUploadModel();
             if ($model->upload()) {
-                echo $model->toJson();
+                return $model->getResponse();
             } else {
-                if ($model->firstErrors) {
-                    echo Json::encode(array('error' => $model->firstErrors[0]));
-                }
+                return ['error' => 'Unable to save image file'];
             }
         }
     }

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -6,6 +7,7 @@
  */
 
 namespace yii\redactor\widgets;
+
 use Yii;
 
 /**
@@ -14,11 +16,15 @@ use Yii;
  */
 class RedactorAsset extends \yii\web\AssetBundle
 {
-    public $depends = array('yii\web\JqueryAsset');
+
+    public $sourcePath = '@vendor/mirocow/yii2-redactor/yii/redactor/assets';
+    public $depends = ['yii\web\JqueryAsset'];
 
     public function init()
     {
-        $this->sourcePath = Yii::getAlias('@yii/redactor/assets');
+
+		$this->sourcePath = Yii::getAlias($this->sourcePath);
+
         if (YII_DEBUG) {
             $this->js[] = 'redactor.js';
             $this->css[] = 'redactor.css';

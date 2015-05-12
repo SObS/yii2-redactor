@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -6,6 +7,8 @@
  */
 
 namespace yii\redactor\controllers;
+use Yii;
+use yii\web\Response;
 
 /**
  * @author Nghia Nguyen <yiidevelop@hotmail.com>
@@ -14,22 +17,32 @@ namespace yii\redactor\controllers;
 class UploadController extends \yii\web\Controller
 {
 
+    public $enableCsrfValidation = false;
+
+    /*public function behaviors()
+    {
+        return [
+            [
+                'class' => 'yii\filters\ContentNegotiator',
+                'formats' => [
+                    'application/json' => Response::FORMAT_JSON
+                ],
+            ]
+        ];
+    }*/
+    
+    public function init(){
+      Yii::$app->response->format = Response::FORMAT_JSON;
+    }
+
     public function actions()
     {
-        return array(
-            'file' => array(
-                'class' => \yii\redactor\actions\FileUploadAction::className()
-            ),
-            'image' => array(
-                'class' => \yii\redactor\actions\ImageUploadAction::className()
-            ),
-            'imagejson' => array(
-                'class' => \yii\redactor\actions\ImageGetJsonAction::className()
-            ),
-            'clipboard' => array(
-                'class' => \yii\redactor\actions\ClipboardUploadAction::className()
-            )
-        );
+        return [
+            'file' => 'yii\redactor\actions\FileUploadAction',
+            'image' => 'yii\redactor\actions\ImageUploadAction',
+            'imagejson' => 'yii\redactor\actions\ImageGetJsonAction',
+            'clipboard' => 'yii\redactor\actions\ClipboardUploadAction'
+        ];
     }
 
 }
