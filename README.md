@@ -17,6 +17,18 @@ or add
 
 to the require section of your application's `composer.json` file.
 
+Add repository
+=====
+
+```json
+    "repositories": [
+        {
+            "type": "git",
+            "url": "https://github.com/mirocow/yii2-redactor.git"
+        }
+    ]
+```
+
 Configurate
 =====
 
