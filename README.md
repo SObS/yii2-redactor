@@ -5,6 +5,20 @@ Installation
 ------------
 The preferred way to install this extension is through [composer](http://getcomposer.org/download/).
 
+Add repositor
+-----------
+
+```json
+    "repositories": [
+        {
+            "type": "git",
+            "url": "https://github.com/mirocow/yii2-redactor.git"
+        }
+    ]
+```
+
+and then
+
 ```
 php composer.phar require --prefer-dist "mirocow/yii2-redactor" "*"
 ```
@@ -16,18 +30,6 @@ or add
 ```
 
 to the require section of your application's `composer.json` file.
-
-Add repository
-=====
-
-```json
-    "repositories": [
-        {
-            "type": "git",
-            "url": "https://github.com/mirocow/yii2-redactor.git"
-        }
-    ]
-```
 
 Configurate
 =====
