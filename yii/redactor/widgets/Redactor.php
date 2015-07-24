@@ -24,15 +24,25 @@ class Redactor extends InputWidget
 {
 
     public $options = [];
-    public $clientOptions = [
+    private $clientDefaultOptions = [
         'imageManagerJson' => '/redactor/upload/imagejson',
         'imageUpload' => '/redactor/upload/image',
-        'fileUpload' => '/redactor/upload/file'
+        'fileUpload' => '/redactor/upload/file',
+        
+        // Redactor.Js settings 
+        // http://imperavi.com/redactor/docs/settings/links/
+        'convertLinks' => false,
+        'convertUrlLinks' => false,
+        'linkNofollow' => true,
     ];
+    public $clientOptions = [
+    ];    
     private $_assetBundle;
 
     public function init()
     {
+        $this->clientOptions = ArrayHelper::merge($this->clientDefaultOptions, $this->clientOptions);
+      
         if (!isset($this->options['id'])) {
             if ($this->hasModel()) {
                 $this->options['id'] = Html::getInputId($this->model, $this->attribute);
