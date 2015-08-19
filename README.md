@@ -1,6 +1,8 @@
 yii2-redactor
 =============
 
+[![Latest Stable Version](https://poser.pugx.org/mirocow/yii2-redactor/v/stable)](https://packagist.org/packages/mirocow/yii2-redactor) [![Total Downloads](https://poser.pugx.org/mirocow/yii2-redactor/downloads)](https://packagist.org/packages/mirocow/yii2-redactor) [![Latest Unstable Version](https://poser.pugx.org/mirocow/yii2-redactor/v/unstable)](https://packagist.org/packages/mirocow/yii2-redactor)
+
 Installation
 ------------
 The preferred way to install this extension is through [composer](http://getcomposer.org/download/).
